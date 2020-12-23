@@ -167,11 +167,10 @@ class PreviewThumbnails {
   };
 
   // Process individual VTT file
-  getThumbnail = (url) => {
+  getThumbnail = (vttData) => {
     return new Promise((resolve) => {
-      fetch(url).then((response) => {
         const thumbnail = {
-          frames: parseVtt(response),
+          frames: parseVtt(vttData),
           height: null,
           urlPrefix: '',
         };
@@ -200,7 +199,6 @@ class PreviewThumbnails {
         };
 
         tempImage.src = thumbnail.urlPrefix + thumbnail.frames[0].text;
-      });
     });
   };
 
