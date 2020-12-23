@@ -1,6 +1,5 @@
 import { createElement } from '../utils/elements';
 import { once } from '../utils/events';
-import fetch from '../utils/fetch';
 import is from '../utils/is';
 import { formatTime } from '../utils/time';
 
@@ -169,36 +168,36 @@ class PreviewThumbnails {
   // Process individual VTT file
   getThumbnail = (vttData) => {
     return new Promise((resolve) => {
-        const thumbnail = {
-          frames: parseVtt(vttData),
-          height: null,
-          urlPrefix: '',
-        };
+      const thumbnail = {
+        frames: parseVtt(vttData),
+        height: null,
+        urlPrefix: '',
+      };
 
-        // If the URLs don't start with '/', then we need to set their relative path to be the location of the VTT file
-        // If the URLs do start with '/', then they obviously don't need a prefix, so it will remain blank
-        // If the thumbnail URLs start with with none of '/', 'http://' or 'https://', then we need to set their relative path to be the location of the VTT file
-        if (
-          !thumbnail.frames[0].text.startsWith('/') &&
-          !thumbnail.frames[0].text.startsWith('http://') &&
-          !thumbnail.frames[0].text.startsWith('https://')
-        ) {
-          thumbnail.urlPrefix = url.substring(0, url.lastIndexOf('/') + 1);
-        }
+      // If the URLs don't start with '/', then we need to set their relative path to be the location of the VTT file
+      // If the URLs do start with '/', then they obviously don't need a prefix, so it will remain blank
+      // If the thumbnail URLs start with with none of '/', 'http://' or 'https://', then we need to set their relative path to be the location of the VTT file
+      // if (
+      //   !thumbnail.frames[0].text.startsWith('/') &&
+      //   !thumbnail.frames[0].text.startsWith('http://') &&
+      //   !thumbnail.frames[0].text.startsWith('https://')
+      // ) {
+      //   thumbnail.urlPrefix = url.substring(0, url.lastIndexOf('/') + 1);
+      // }
 
-        // Download the first frame, so that we can determine/set the height of this thumbnailsDef
-        const tempImage = new Image();
+      // Download the first frame, so that we can determine/set the height of this thumbnailsDef
+      const tempImage = new Image();
 
-        tempImage.onload = () => {
-          thumbnail.height = tempImage.naturalHeight;
-          thumbnail.width = tempImage.naturalWidth;
+      tempImage.onload = () => {
+        thumbnail.height = tempImage.naturalHeight;
+        thumbnail.width = tempImage.naturalWidth;
 
-          this.thumbnails.push(thumbnail);
+        this.thumbnails.push(thumbnail);
 
-          resolve();
-        };
+        resolve();
+      };
 
-        tempImage.src = thumbnail.urlPrefix + thumbnail.frames[0].text;
+      tempImage.src = thumbnail.urlPrefix + thumbnail.frames[0].text;
     });
   };
 
